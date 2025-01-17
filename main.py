@@ -43,7 +43,7 @@ options.add_argument('--no-sandbox')  # Для совместимости с н�
 options.add_argument('--disable-dev-shm-usage')  # Для предотвращения проблем с памятью
 
 # Telegram API Token и ID канала
-API_TOKEN = "7606267540:AAFQpNUnwRZbsvVO0HRo0gRgowYHo89gpGE"  # Укажите ваш токен
+API_TOKEN = "7606267540:AAEf9LfZcZef9e7dPZN-9prKrjFu5mmi314"  # Укажите ваш токен
 CHANNEL_ID = "@creep_to_cryp"  # Укажите ID вашего канала
 
 # CoinMarketCap API Key
