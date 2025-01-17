@@ -25,7 +25,8 @@ import asyncio
 import ssl
 import certifi
 
-
+PORT = int(os.getenv("PORT", 5000))  # Render назначает порт через переменную $PORT
+app.run(host='0.0.0.0', port=PORT)
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
