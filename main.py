@@ -653,6 +653,7 @@ async def main():
 
 # Запуск асинхронной функции
 if __name__ == "__main__":
+    asyncio.run(dummy_server())
     asyncio.run(main())
 
 
