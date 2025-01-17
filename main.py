@@ -20,6 +20,7 @@ from aiogram.dispatcher.router import Router
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.types import FSInputFile
+from aiohttp import web
 import aiohttp
 import asyncio
 import ssl
