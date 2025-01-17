@@ -42,7 +42,7 @@ options.add_argument('--no-sandbox')  # Для совместимости с н�
 options.add_argument('--disable-dev-shm-usage')  # Для предотвращения проблем с памятью
 
 # Telegram API Token и ID канала
-API_TOKEN = "7606267540:AAG6epuawI5IBSbgQzz1riuwQmiYiTpf6dc"  # Укажите ваш токен
+API_TOKEN = "7606267540:AAFQpNUnwRZbsvVO0HRo0gRgowYHo89gpGE"  # Укажите ваш токен
 CHANNEL_ID = "@creep_to_cryp"  # Укажите ID вашего канала
 
 # CoinMarketCap API Key
@@ -75,7 +75,15 @@ ALT_SEASON_FILE_PATH = os.path.join(os.getcwd(), "alt_season_previous.json")
 # Путь для скриншотов
 SCREENSHOTS_DIR = "/Users/testin/PycharmProjects/Creep_to_Cryp Bot/screenshots"
 
-
+async def dummy_server():
+    app = web.Application()
+    async def handle(request):
+        return web.Response(text="Bot is running!")
+    app.add_routes([web.get('/', handle)])
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', int(os.getenv('PORT', 8080)))
+    await site.start()
 
 # Функция для создания скриншота
 def capture_screenshot(url, output_path):
