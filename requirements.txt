@@ -1,6 +1,9 @@
 requests
 selenium
+webdriver-manager
 pillow
 apscheduler
 aiogram
-webdriver-manager
+aiohttp
+pytz
+certifi
