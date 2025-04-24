@@ -20,16 +20,14 @@ from aiogram.dispatcher.router import Router
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.types import FSInputFile
-from aiohttp import web
 import aiohttp
 import asyncio
 import ssl
 import certifi
 
-PORT = int(os.getenv("PORT", 5000))  # Render назначает порт через переменную $PORT
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 # Инициализация планировщика
 scheduler = AsyncIOScheduler()
@@ -43,7 +41,7 @@ options.add_argument('--no-sandbox')  # Для совместимости с н�
 options.add_argument('--disable-dev-shm-usage')  # Для предотвращения проблем с памятью
 
 # Telegram API Token и ID канала
-API_TOKEN = "7606267540:AAEf9LfZcZef9e7dPZN-9prKrjFu5mmi314"  # Укажите ваш токен
+API_TOKEN = "7606267540:AAF43bbrYwzSqEGhydAC_UiHwnZCzO9R0fk"  # Укажите ваш токен
 CHANNEL_ID = "@creep_to_cryp"  # Укажите ID вашего канала
 
 # CoinMarketCap API Key
@@ -76,15 +74,7 @@ ALT_SEASON_FILE_PATH = os.path.join(os.getcwd(), "alt_season_previous.json")
 # Путь для скриншотов
 SCREENSHOTS_DIR = "/Users/testin/PycharmProjects/Creep_to_Cryp Bot/screenshots"
 
-async def dummy_server():
-    app = web.Application()
-    async def handle(request):
-        return web.Response(text="Bot is running!")
-    app.add_routes([web.get('/', handle)])
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, '0.0.0.0', int(os.getenv('PORT', 8080)))
-    await site.start()
+
 
 # Функция для создания скриншота
 def capture_screenshot(url, output_path):
@@ -157,8 +147,6 @@ async def get_data_from_api():
                 global_response.raise_for_status()
                 global_data = await global_response.json()
 
-            print("Ответ от CoinMarketCap:", global_data)
-
             if "data" in global_data:
                 data["market_cap"] = f"{global_data['data']['quote']['USD']['total_market_cap'] / 1e12:.2f}T"
                 market_cap_change = global_data['data']['quote']['USD'].get("total_market_cap_yesterday_percentage_change", None)
@@ -185,8 +173,6 @@ async def get_data_from_api():
                 crypto_response.raise_for_status()
                 crypto_data = await crypto_response.json()
 
-            print("Ответ от CoinMarketCap по криптовалютам:", crypto_data)
-
             if "data" in crypto_data:
                 data["cryptos"] = "\n".join([
                     f"{symbol}: ${crypto_data['data'][symbol]['quote']['USD']['price']:.2f}"
@@ -199,7 +185,6 @@ async def get_data_from_api():
                 fng_response.raise_for_status()
                 fng_data = await fng_response.json()
 
-            print("Ответ от Alternative.me:", fng_data)
 
             if "data" in fng_data and isinstance(fng_data["data"], list) and len(fng_data["data"]) > 0:
                 fear_greed_value = fng_data["data"][0]["value"]
@@ -216,10 +201,7 @@ async def get_data_from_api():
         print(f"Ошибка: {e}")
         data = {"error": str(e)}
 
-    print(f"Отладка данных перед публикацией: {data}")
     return data
-
-
 
 # Функция для получения данных об индексе страха и жадности с API
 def get_fear_and_greed_index(alt_fng_url):
@@ -351,8 +333,6 @@ def save_previous_alt_season_index(value):
         # Записываем данные в файл
         with open(ALT_SEASON_FILE_PATH, 'w') as file:
             json.dump({"alt_season_index": value}, file)
-
-        print(f"Индекс альтсезона успешно сохранен: {value}")
 
     except OSError as e:
         print(f"Ошибка доступа или записи в файл {ALT_SEASON_FILE_PATH}: {e}")
@@ -594,7 +574,6 @@ async def post_to_channel():
 
         # Генерация сообщения
         message = await generate_message(data)
-        print(f"Отладка перед отправкой: {message}")
 
         # Создание скриншота
         screenshot_path = capture_screenshot("https://cryptobubbles.net/", "./screenshots")
@@ -654,7 +633,4 @@ async def main():
 
 # Запуск асинхронной функции
 if __name__ == "__main__":
-    asyncio.run(dummy_server())
     asyncio.run(main())
-
-
